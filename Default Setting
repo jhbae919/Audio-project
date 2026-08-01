@@ -1,0 +1,32 @@
+1.  검색 [Tools] -> SDK Manager -> SDK Tools 
+  NDK, Cmake 체크하고 Apply
+    # 이 과정은 새로운 환경에서 시작할 때마다 다시 해주어야 한다!!
+
+2.  [Gradle Scripts] 폴더에서 build.gradle.kts (Module :app) 연 후
+    android {
+    // ... (기존에 있던 코드들) ...
+
+        buildFeatures {
+            prefab = true
+        }
+    } 
+
+    dependencies {
+        // ... (기존에 있던 코드들) ...
+
+        implementation("com.google.oboe:oboe:1.9.0")
+    }
+    형식으로 추가한 뒤 sync 해주기
+    sync now!
+
+3.  화면 왼쪽 Project 뷰에서 app ➡ src ➡ main ➡ cpp 폴더를 차례대로 열어 CMakeLists.txt 파일을 더블클릭합니다.
+      젤 아래쪽에 find_package(oboe REQUIRED CONFIG) 써넣기
+      방금 써넣은 블록 바로 위에 있는 target link 블록 수정.
+      android와 log) 사이에 oboe::oboe 를 써넣어 cpp설계도에 oboe연결하는 작업을 해준다.
+      target_link_libraries(${CMAKE_PROJECT_NAME}
+        # List libraries link to the target library
+        android
+        oboe::oboe
+        log)
+      이때 간혹 sync now 버튼이 안 뜨는 경우가 있음.
+      그럴 경우 우측 setting 바의 코끼리 모양 아이콘 클릭해서 수동 sync해주기.
